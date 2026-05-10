@@ -51,6 +51,6 @@ app.use((_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`⚽ Football API running at http://localhost:${PORT}`);
-  console.log(`🎮 GraphQL Playground at http://localhost:${PORT}/playground`);
+  console.log(`Football API running at http://localhost:${PORT}`);
+  console.log(`GraphQL Playground at http://localhost:${PORT}/playground`);
 });
