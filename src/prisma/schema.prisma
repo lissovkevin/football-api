@@ -4,10 +4,47 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model League {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  country String
+  matches Match[]
+}
+
+model Team {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  country     String
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+}
+
+model Match {
+  id         Int     @id @default(autoincrement())
+  date       String
+  homeTeamId Int
+  awayTeamId Int
+  homeGoals  Int?
+  awayGoals  Int?
+  leagueId   Int
+  season     String
+
+  homeTeam   Team    @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam   Team    @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  league     League  @relation(fields: [leagueId], references: [id])
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
 }

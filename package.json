@@ -1,30 +1,28 @@
 {
-  "name": "assignment-api-design",
+  "name": "football-api",
   "version": "1.0.0",
-  "description": "*Replace with the name of your API project.*",
-  "main": "index.js",
+  "description": "GraphQL API for football match data",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "db:push": "npx prisma db push --schema=src/prisma/schema.prisma",
+    "db:seed": "node scripts/seed.js",
+    "db:studio": "npx prisma studio --schema=src/prisma/schema.prisma"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.lnu.se:1dv027/student/kl223py/assignment-api-design.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "graphql": "^16.14.0",
-    "graphql-http": "^1.22.4",
-    "jsonwebtoken": "^9.0.3",
-    "ruru": "^2.0.0"
+    "@prisma/adapter-neon": "^7.8.0",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.3",
+    "jsonwebtoken": "^9.0.2",
+    "ruru": "^2.0.0-beta.14"
   },
   "devDependencies": {
-    "@prisma/client": "^7.8.0",
-    "prisma": "^7.8.0"
+    "prisma": "^5.22.0"
   }
 }
