@@ -1,0 +1,30 @@
+{
+  "name": "assignment-api-design",
+  "version": "1.0.0",
+  "description": "*Replace with the name of your API project.*",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.lnu.se:1dv027/student/kl223py/assignment-api-design.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "graphql": "^16.14.0",
+    "graphql-http": "^1.22.4",
+    "jsonwebtoken": "^9.0.3",
+    "ruru": "^2.0.0"
+  },
+  "devDependencies": {
+    "@prisma/client": "^7.8.0",
+    "prisma": "^7.8.0"
+  }
+}
