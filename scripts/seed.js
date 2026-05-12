@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parse } from "csv-parse/sync";
 
 const prisma = new PrismaClient();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -10,7 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 async function main() {
   console.log("Starting seed...");
 
-  // Create default admin user
   const hashedPassword = await bcrypt.hash("admin123", 10);
   await prisma.user.upsert({
     where: { username: "admin" },
@@ -19,48 +19,33 @@ async function main() {
   });
   console.log("Admin user created (username: admin, password: admin123)");
 
-  // Read CSV file
   const csvPath = path.join(__dirname, "data.csv");
 
   if (!fs.existsSync(csvPath)) {
     console.log("No CSV found at scripts/data.csv");
-    console.log("Download your dataset from Kaggle and save it as scripts/data.csv");
-    console.log("Then run npm run db:seed again.");
     return;
   }
 
   const raw = fs.readFileSync(csvPath, "utf-8");
-  const lines = raw.split("\n").filter(Boolean);
-  const headers = lines[0].split(",").map((h) => h.trim().toLowerCase().replace(/"/g, ""));
+  
+  const records = parse(raw, {
+    columns: true,
+    skip_empty_lines: true,
+    relax_quotes: true,
+    trim: true,
+  });
 
-  console.log(`CSV headers: ${headers.join(", ")}`);
-  console.log(`Total rows: ${lines.length - 1}`);
-
-  // Update these to match your CSV column names
-  const COL = {
-    date:      headers.indexOf("date"),
-    homeTeam:  headers.indexOf("home_team"),
-    awayTeam:  headers.indexOf("away_team"),
-    homeGoals: headers.indexOf("home_goals"),
-    awayGoals: headers.indexOf("away_goals"),
-    league:    headers.indexOf("league"),
-    season:    headers.indexOf("season"),
-    country:   headers.indexOf("country"),
-  };
+  console.log(`Total rows: ${records.length}`);
 
   const leagueSet = new Map();
   const teamSet = new Set();
 
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(",").map((c) => c.trim().replace(/"/g, ""));
-    const leagueName = cols[COL.league];
-    const country = COL.country !== -1 ? cols[COL.country] : "Unknown";
-    if (leagueName) leagueSet.set(leagueName, country);
-    if (cols[COL.homeTeam]) teamSet.add(cols[COL.homeTeam]);
-    if (cols[COL.awayTeam]) teamSet.add(cols[COL.awayTeam]);
+  for (const row of records) {
+    if (row.League) leagueSet.set(row.League, "Unknown");
+    if (row.Home) teamSet.add(row.Home);
+    if (row.Away) teamSet.add(row.Away);
   }
 
-  // Insert leagues
   console.log(`Inserting ${leagueSet.size} leagues...`);
   for (const [name, country] of leagueSet) {
     await prisma.league.upsert({
@@ -70,7 +55,6 @@ async function main() {
     });
   }
 
-  // Insert teams
   console.log(`Inserting ${teamSet.size} teams...`);
   for (const name of teamSet) {
     await prisma.team.upsert({
@@ -80,7 +64,6 @@ async function main() {
     });
   }
 
-  // Insert matches in batches
   const allLeagues = await prisma.league.findMany();
   const allTeams = await prisma.team.findMany();
   const leagueMap = Object.fromEntries(allLeagues.map((l) => [l.name, l.id]));
@@ -89,25 +72,24 @@ async function main() {
   const BATCH = 500;
   let inserted = 0;
 
-  for (let i = 1; i < lines.length; i += BATCH) {
-    const batch = lines.slice(i, i + BATCH);
+  for (let i = 0; i < records.length; i += BATCH) {
+    const batch = records.slice(i, i + BATCH);
     const data = [];
 
-    for (const line of batch) {
-      const cols = line.split(",").map((c) => c.trim().replace(/"/g, ""));
-      const homeTeamId = teamMap[cols[COL.homeTeam]];
-      const awayTeamId = teamMap[cols[COL.awayTeam]];
-      const leagueId = leagueMap[cols[COL.league]];
+    for (const row of batch) {
+      const homeTeamId = teamMap[row.Home];
+      const awayTeamId = teamMap[row.Away];
+      const leagueId = leagueMap[row.League];
       if (!homeTeamId || !awayTeamId || !leagueId) continue;
 
       data.push({
-        date: cols[COL.date] || "Unknown",
+        date: row.Date || "Unknown",
         homeTeamId,
         awayTeamId,
-        homeGoals: parseInt(cols[COL.homeGoals]) || null,
-        awayGoals: parseInt(cols[COL.awayGoals]) || null,
+        homeGoals: parseFloat(row.H_Score) || null,
+        awayGoals: parseFloat(row.A_Score) || null,
         leagueId,
-        season: cols[COL.season] || "Unknown",
+        season: row.Round || "Unknown",
       });
     }
 
