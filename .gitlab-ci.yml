@@ -9,3 +9,6 @@ run-api-tests:
     - newman run postman/Football-API.postman_collection.json
         -e postman/production.postman_environment.json
         --reporters cli
+  only:
+    - main
+    - merge_requests
