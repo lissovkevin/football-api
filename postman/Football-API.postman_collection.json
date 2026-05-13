@@ -806,7 +806,8 @@
           {
             "key": "Authorization",
             "value": "Bearer {{token}}",
-            "type": "text"
+            "type": "text",
+            "disabled": true
           }
         ],
         "body": {
