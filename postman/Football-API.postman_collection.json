@@ -28,6 +28,17 @@
             "packages": {},
             "requests": {}
           }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set(\"randomUsername\", \"user_\" + Math.random().toString(36).substring(2, 8));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
         }
       ],
       "request": {
@@ -35,7 +46,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"query\": \"mutation { register(username: \\\"test\\\", password: \\\"password123\\\") { token message } }\"\n}",
+          "raw": "{\n  \"query\": \"mutation { register(username: \\\"{{randomUsername}}\\\", password: \\\"password123\\\") { token message } }\"\n}",
           "options": {
             "raw": {
               "language": "json"
