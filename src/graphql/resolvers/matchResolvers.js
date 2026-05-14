@@ -1,3 +1,5 @@
+// Handles all match related queries and mutations.
+// Requires authentication for create, update and delete operations.
 import { PrismaClient } from "../../generated/prisma/index.js";
 
 const prisma = new PrismaClient();

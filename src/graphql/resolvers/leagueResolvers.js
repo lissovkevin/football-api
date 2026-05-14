@@ -1,3 +1,5 @@
+// Handles all league related queries.
+// Leagues are read only. No mutations allowed.
 import { PrismaClient } from "../../generated/prisma/index.js";
 
 const prisma = new PrismaClient();

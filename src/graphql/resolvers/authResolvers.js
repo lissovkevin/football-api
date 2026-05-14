@@ -1,3 +1,4 @@
+// Handles user registration and login, including password hashing and JWT token generation.
 import { PrismaClient } from "../../generated/prisma/index.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
