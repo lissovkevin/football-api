@@ -1,14 +1,17 @@
 stages:
   - test
+  - start
+
+run-lint:
+  stagge: lint
+  image: node:20
+  script:
+    - npm install
+    - npm run lint
 
 run-api-tests:
   stage: test
   image: node:20
   script:
     - npm install -g newman
-    - newman run postman/Football-API.postman_collection.json
-        -e postman/production.postman_environment.json
-        --reporters cli
-  only:
-    - main
-    - merge_requests
+    - npm test

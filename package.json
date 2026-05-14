@@ -8,6 +8,7 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "lint": "eslint src/ scripts/",
+    "test": "newman run postman/Football-API.postman_collection.json -e postman/production.postman_environment.json",
     "db:push": "npx prisma db push --schema=src/prisma/schema.prisma",
     "db:seed": "node scripts/seed.js",
     "db:studio": "npx prisma studio --schema=src/prisma/schema.prisma"
