@@ -10,7 +10,7 @@ Design and develop a robust, well-documented API (REST or GraphQL) that allows u
 
 Choose a dataset (10000+ data points) that interests you — it should include at least one primary CRUD resource and two additional read-only resources. Sources like [Kaggle](https://www.kaggle.com/datasets), public APIs, or CSV files work well. Pick something you find interesting, as you will reuse this API in the next assignment (WT dashboard).
 
-This API serves historical football match data from 18 European leagues. Users can browse matches, teams and leagues freely. Authenticated users can create, update and delete matches. The API uses JWT authentication, is deployed publicly on Render.com, and includes 22 automated Postman tests with 50 assertions. A CI/CD pipeline is configured in `.gitlab-ci.yml` to run tests automatically on every commit using Newman, though the pipeline execution is affected by group-level GitLab CI settings. Tests can be verified manually by running:
+This API serves historical football match data from 18 European leagues. Users can browse matches, teams and leagues freely. Authenticated users can create, update and delete matches. The API uses JWT authentication, is deployed publicly on Render.com, and includes 22 automated Postman tests with 50 assertions. A CI/CD pipeline is configured in `.gitlab-ci.yml` to run tests automatically on every commit using Newman,  but I couldn't seem to get the CI/CD work. Tests can be verified manually by running:
 
 ```bash
 npx newman run postman/Football-API.postman_collection.json -e postman/production.postman_environment.json
