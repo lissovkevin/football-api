@@ -1,3 +1,6 @@
+// This file defines the GraphQL schema for the football match API, including types, queries, and mutations.
+// Queries are read-only operations (no login needed).
+// Mutations are write operations (login required). 
 import { buildSchema } from "graphql";
 
 export const schema = buildSchema(`

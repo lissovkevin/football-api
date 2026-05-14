@@ -1,3 +1,6 @@
+// This middleware checks every request for a valid JWT token.
+// If a valid token is found, the user is attached to the context.
+// The resolvers can the check context.user to see i fthe user is logged in or not.
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "change-this-secret";
