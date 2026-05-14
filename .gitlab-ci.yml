@@ -1,6 +1,6 @@
 stages:
   - test
-  - start
+  - lint
 
 run-lint:
   stagge: lint
