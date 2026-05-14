@@ -14,7 +14,7 @@ export function buildContext(req) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return { user: decoded };
-  } catch (err) {
+  } catch {
     return { user: null };
   }
 }
